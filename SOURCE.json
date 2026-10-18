@@ -18,8 +18,8 @@
   "gpuExecuted": false,
   "httpsHttpVerified": true,
   "pagesActivation": "BUILT_HTTPS_ENFORCED",
-  "publicVerificationCommit": "31974f7efb5a92eef1895761b310a80b1ec85724",
-  "publicVerificationRun": "https://github.com/dimon3898-sys/world-engine-connect/actions/runs/39104794558",
+  "publicVerificationCommit": "8cdbd31751fd5927d481f6633ab1c4601f66fc4f",
+  "publicVerificationRun": "https://github.com/dimon3898-sys/world-engine-connect/actions/runs/39104894198",
   "readmeOriginalSha256": "58662ee222024f7abe2b0b9ee0fbab6b3c21997c0d86f63b05c5633fc951a93e",
   "realBackupRestoreVerified": false,
   "realDropboxConnectionVerified": false,
@@ -40,6 +40,6 @@
   "sourcePath": "world-simulation-shorts-engine/recovery/studio-dropbox-mobile-v1/web",
   "sourceRepository": "dimon3898-sys/yeonhwarok-free",
   "targetRepository": "dimon3898-sys/world-engine-connect",
-  "verificationScope": "Pre-activation published HTTPS, ten asset hashes and mobile browser; enabled OAuth entry rechecked by subsequent workflow.",
+  "verificationScope": "Activated published HTTPS, ten asset hashes, mobile browser and offline S256 authorization construction; provider navigation intercepted before contact. Runner Korean screenshot fonts added separately.",
   "verifiedCanonicalURL": "https://dimon3898-sys.github.io/world-engine-connect/"
 }

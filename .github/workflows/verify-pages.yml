@@ -25,6 +25,11 @@ jobs:
       - name: Install locked CPU browser control dependency
         working-directory: .github/pages-check
         run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Provide Korean glyphs for actual mobile screenshots
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install --no-install-recommends -y fonts-noto-cjk
+          fc-match -f '%{family}\n' 'sans:lang=ko'
       - name: Verify immutable public assets and actual mobile HTTPS navigation
         env:
           CHROMIUM_EXECUTABLE: /usr/bin/google-chrome
