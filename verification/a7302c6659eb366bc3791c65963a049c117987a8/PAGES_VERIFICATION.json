@@ -1,0 +1,80 @@
+{
+  "schema": "WORLD_ENGINE_CONNECT_PAGES_CHECK_V1",
+  "status": "PASS",
+  "url": "https://dimon3898-sys.github.io/world-engine-connect/",
+  "checkedAt": "2026-10-18T06:42:34.127Z",
+  "commit": "a7302c6659eb366bc3791c65963a049c117987a8",
+  "configurationEnabled": true,
+  "tlsVerificationDisabled": false,
+  "viewport": {
+    "width": 412,
+    "height": 915
+  },
+  "assets": {
+    "callback-scrub.js": {
+      "httpStatus": 200,
+      "sha256": "2fe2925d83e40d64ba38c69170890b3292e92bdae072cd56a74c4efb95933065",
+      "matches": true
+    },
+    "config.js": {
+      "httpStatus": 200,
+      "sha256": "e48a456fca6fa820cf1a61f91ed2360338c50b68db21f9f7d352daee5a40fcaf",
+      "matches": true
+    },
+    "connect-core.js": {
+      "httpStatus": 200,
+      "sha256": "9338e629d5b6477f3ba3463c3f7fdf4b5a9a4c8b39e2584eb0d1cc053b76ae10",
+      "matches": true
+    },
+    "connect.css": {
+      "httpStatus": 200,
+      "sha256": "b06240c870c21157fcf4297ffa586f1a35b4ae31615bdd707b42ce0614ae1220",
+      "matches": true
+    },
+    "connect.js": {
+      "httpStatus": 200,
+      "sha256": "3db543f540515599622d4a3f07dd71534440baf68200d210e4c26b5dc59ba20c",
+      "matches": true
+    },
+    "index.html": {
+      "httpStatus": 200,
+      "sha256": "2a413c8c87d662645a7e3c64dc93cd84e25a76aa67efb01d4c0519d8e4db4450",
+      "matches": true
+    },
+    "vendor/libsodium-wrappers.LICENSE": {
+      "httpStatus": 200,
+      "sha256": "051795a65af6a45e1022e56b01123e399d28c4d2680681d3e207df2669da5d85",
+      "matches": true
+    },
+    "vendor/libsodium-wrappers.js": {
+      "httpStatus": 200,
+      "sha256": "828884732c06fa4443688b33ceb4ab42e6e1b99200e4749be375faa289e94158",
+      "matches": true
+    },
+    "vendor/libsodium.LICENSE": {
+      "httpStatus": 200,
+      "sha256": "051795a65af6a45e1022e56b01123e399d28c4d2680681d3e207df2669da5d85",
+      "matches": true
+    },
+    "vendor/libsodium.js": {
+      "httpStatus": 200,
+      "sha256": "8abec6b42fafb418f58bff3fd665005b3e700ee02dae5042ce5704d27e6fcb23",
+      "matches": true
+    }
+  },
+  "realDropboxOAuthVerified": false,
+  "realBackupRestoreVerified": false,
+  "credentialsUsed": false,
+  "providerTokenRequests": 0,
+  "gpuExecuted": false,
+  "mobile": {
+    "actualHttpsBrowserNavigation": true,
+    "browserAssetsMatch": true,
+    "noHorizontalOverflow": true,
+    "scriptErrors": 0,
+    "setupGateVisible": false,
+    "oauthStartVisible": true,
+    "offlinePkceRequestInspectedAndAborted": true,
+    "actualDropboxProviderContacted": false
+  }
+}
