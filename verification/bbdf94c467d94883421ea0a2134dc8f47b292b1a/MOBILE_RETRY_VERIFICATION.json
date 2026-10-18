@@ -1,0 +1,106 @@
+{
+  "schema": "WORLD_ENGINE_CONNECT_RETRY_MOBILE_V1",
+  "status": "PASS",
+  "checkedAt": "2026-10-18T07:18:46.689Z",
+  "viewport": {
+    "width": 412,
+    "height": 915
+  },
+  "assertions": 694,
+  "cases": [
+    {
+      "case": "preflight-network",
+      "status": "PASS",
+      "oauthTokenExchanges": 1,
+      "secretWrites": 3,
+      "proofDispatches": 1,
+      "runsMetadataReads": 2,
+      "existingKeyPreserved": true,
+      "existingAppSecretPreserved": true,
+      "gpuExecuted": false
+    },
+    {
+      "case": "preflight-401",
+      "status": "PASS",
+      "oauthTokenExchanges": 1,
+      "secretWrites": 3,
+      "proofDispatches": 1,
+      "runsMetadataReads": 2,
+      "existingKeyPreserved": true,
+      "existingAppSecretPreserved": true,
+      "gpuExecuted": false
+    },
+    {
+      "case": "preflight-403",
+      "status": "PASS",
+      "oauthTokenExchanges": 1,
+      "secretWrites": 3,
+      "proofDispatches": 1,
+      "runsMetadataReads": 2,
+      "existingKeyPreserved": true,
+      "existingAppSecretPreserved": true,
+      "gpuExecuted": false
+    },
+    {
+      "case": "saved-status-network",
+      "status": "PASS",
+      "oauthTokenExchanges": 1,
+      "secretWrites": 3,
+      "proofDispatches": 1,
+      "runsMetadataReads": 3,
+      "existingKeyPreserved": true,
+      "existingAppSecretPreserved": true,
+      "gpuExecuted": false
+    },
+    {
+      "case": "dispatch-preflight-network",
+      "status": "PASS",
+      "oauthTokenExchanges": 1,
+      "secretWrites": 3,
+      "proofDispatches": 1,
+      "runsMetadataReads": 2,
+      "existingKeyPreserved": true,
+      "existingAppSecretPreserved": true,
+      "gpuExecuted": false
+    },
+    {
+      "case": "dispatch-ambiguous",
+      "status": "PASS",
+      "oauthTokenExchanges": 1,
+      "secretWrites": 3,
+      "proofDispatches": 1,
+      "runsMetadataReads": 2,
+      "existingKeyPreserved": true,
+      "existingAppSecretPreserved": true,
+      "gpuExecuted": false
+    },
+    {
+      "case": "poll-network",
+      "status": "PASS",
+      "oauthTokenExchanges": 1,
+      "secretWrites": 3,
+      "proofDispatches": 1,
+      "runsMetadataReads": 3,
+      "existingKeyPreserved": true,
+      "existingAppSecretPreserved": true,
+      "gpuExecuted": false
+    },
+    {
+      "case": "poll-401-replace",
+      "status": "PASS",
+      "oauthTokenExchanges": 1,
+      "secretWrites": 3,
+      "proofDispatches": 1,
+      "runsMetadataReads": 3,
+      "existingKeyPreserved": true,
+      "existingAppSecretPreserved": true,
+      "gpuExecuted": false
+    }
+  ],
+  "syntheticProvidersOnly": true,
+  "realDropboxVerified": false,
+  "realGitHubSecretWritten": false,
+  "gpuExecuted": false,
+  "tlsVerificationDisabled": false,
+  "browser": "155.0.8059.39"
+}
