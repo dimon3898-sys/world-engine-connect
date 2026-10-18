@@ -1,0 +1,561 @@
+{
+  "schema": "WORLD_ENGINE_CONNECT_GITHUB_NETWORK_DIAGNOSIS_V1",
+  "status": "CAPTURED",
+  "checkedAt": "2026-10-18T07:09:59.135Z",
+  "pageURL": "https://dimon3898-sys.github.io/world-engine-connect/",
+  "commit": "a3b8dd6291ccbb24cf8b166a1969dbf48b06d78e",
+  "credentialsUsed": false,
+  "syntheticInvalidAuthorizationUsed": true,
+  "secretWrites": 0,
+  "realDropboxConnected": false,
+  "gpuExecuted": false,
+  "tlsVerificationDisabled": false,
+  "probes": [
+    {
+      "name": "public-repository-original-options",
+      "outcome": "HTTP_RESPONSE",
+      "httpStatus": 200,
+      "responseType": "cors",
+      "redirected": false
+    },
+    {
+      "name": "existing-core-github-preflight",
+      "outcome": "CAPTURED_ERROR",
+      "errorCode": "GITHUB_HTTP_401"
+    },
+    {
+      "name": "direct-default-error",
+      "cache": "default",
+      "redirect": "error",
+      "outcome": "HTTP_RESPONSE",
+      "httpStatus": 401,
+      "responseType": "cors",
+      "redirected": false,
+      "responseHeaderNames": [
+        "content-type",
+        "x-github-edge-region",
+        "x-github-media-type",
+        "x-github-request-id"
+      ]
+    },
+    {
+      "name": "direct-default-manual",
+      "cache": "default",
+      "redirect": "manual",
+      "outcome": "HTTP_RESPONSE",
+      "httpStatus": 401,
+      "responseType": "cors",
+      "redirected": false,
+      "responseHeaderNames": [
+        "content-type",
+        "x-github-edge-region",
+        "x-github-media-type",
+        "x-github-request-id"
+      ]
+    },
+    {
+      "name": "direct-no-store-error",
+      "cache": "no-store",
+      "redirect": "error",
+      "outcome": "HTTP_RESPONSE",
+      "httpStatus": 401,
+      "responseType": "cors",
+      "redirected": false,
+      "responseHeaderNames": [
+        "content-type",
+        "x-github-edge-region",
+        "x-github-media-type",
+        "x-github-request-id"
+      ]
+    },
+    {
+      "name": "direct-no-store-manual",
+      "cache": "no-store",
+      "redirect": "manual",
+      "outcome": "HTTP_RESPONSE",
+      "httpStatus": 401,
+      "responseType": "cors",
+      "redirected": false,
+      "responseHeaderNames": [
+        "content-type",
+        "x-github-edge-region",
+        "x-github-media-type",
+        "x-github-request-id"
+      ]
+    }
+  ],
+  "network": [
+    {
+      "probe": "public-repository-original-options",
+      "endpoint": "public-repository-metadata",
+      "method": "GET",
+      "requestHeaderNames": [
+        "accept",
+        "referer",
+        "sec-ch-ua",
+        "sec-ch-ua-mobile",
+        "sec-ch-ua-platform",
+        "user-agent",
+        "x-github-api-version"
+      ],
+      "extraRequestHeaderNames": [
+        "accept",
+        "accept-encoding",
+        "accept-language",
+        "cache-control",
+        "origin",
+        "pragma",
+        "priority",
+        "sec-ch-ua",
+        "sec-ch-ua-mobile",
+        "sec-ch-ua-platform",
+        "sec-fetch-dest",
+        "sec-fetch-mode",
+        "sec-fetch-site",
+        "user-agent",
+        "x-github-api-version"
+      ],
+      "extraHttpStatus": 200,
+      "extraCorsResponseHeaders": {
+        "access-control-allow-origin": "*",
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset, Warning"
+      },
+      "httpStatus": 200,
+      "corsResponseHeaders": {
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset, Warning",
+        "access-control-allow-origin": "*"
+      }
+    },
+    {
+      "probe": "public-repository-original-options",
+      "endpoint": "public-repository-metadata",
+      "method": "OPTIONS",
+      "requestHeaderNames": [
+        "accept",
+        "access-control-request-headers",
+        "access-control-request-method",
+        "origin",
+        "sec-fetch-mode",
+        "user-agent"
+      ],
+      "extraRequestHeaderNames": [
+        "accept",
+        "accept-encoding",
+        "accept-language",
+        "access-control-request-headers",
+        "access-control-request-method",
+        "cache-control",
+        "origin",
+        "pragma",
+        "priority",
+        "sec-fetch-dest",
+        "sec-fetch-mode",
+        "sec-fetch-site",
+        "user-agent"
+      ],
+      "extraHttpStatus": 204,
+      "extraCorsResponseHeaders": {
+        "access-control-allow-headers": "Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since, Accept-Encoding, X-GitHub-OTP, X-Requested-With, User-Agent, GraphQL-Features, X-Github-Next-Global-ID, X-GitHub-Api-Version, X-Fetch-Nonce, Copilot-Integration-Id, DD-CLIENT-TOKEN, X-Client-Application, X-Experiment-Commit-Agent-Version",
+        "access-control-allow-methods": "GET, POST, PATCH, PUT, DELETE",
+        "access-control-allow-origin": "*",
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset",
+        "access-control-max-age": "86400"
+      },
+      "httpStatus": 204,
+      "corsResponseHeaders": {
+        "access-control-allow-headers": "Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since, Accept-Encoding, X-GitHub-OTP, X-Requested-With, User-Agent, GraphQL-Features, X-Github-Next-Global-ID, X-GitHub-Api-Version, X-Fetch-Nonce, Copilot-Integration-Id, DD-CLIENT-TOKEN, X-Client-Application, X-Experiment-Commit-Agent-Version",
+        "access-control-allow-methods": "GET, POST, PATCH, PUT, DELETE",
+        "access-control-allow-origin": "*",
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset",
+        "access-control-max-age": "86400"
+      }
+    },
+    {
+      "probe": "existing-core-github-preflight",
+      "endpoint": "repository-secret-metadata",
+      "method": "GET",
+      "requestHeaderNames": [
+        "accept",
+        "authorization",
+        "referer",
+        "sec-ch-ua",
+        "sec-ch-ua-mobile",
+        "sec-ch-ua-platform",
+        "user-agent",
+        "x-github-api-version"
+      ],
+      "extraRequestHeaderNames": [
+        "accept",
+        "accept-encoding",
+        "accept-language",
+        "authorization",
+        "cache-control",
+        "origin",
+        "pragma",
+        "priority",
+        "sec-ch-ua",
+        "sec-ch-ua-mobile",
+        "sec-ch-ua-platform",
+        "sec-fetch-dest",
+        "sec-fetch-mode",
+        "sec-fetch-site",
+        "user-agent",
+        "x-github-api-version"
+      ],
+      "extraHttpStatus": 401,
+      "extraCorsResponseHeaders": {
+        "access-control-allow-origin": "*",
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset"
+      },
+      "httpStatus": 401,
+      "corsResponseHeaders": {
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset",
+        "access-control-allow-origin": "*"
+      }
+    },
+    {
+      "probe": "existing-core-github-preflight",
+      "endpoint": "repository-secret-metadata",
+      "method": "OPTIONS",
+      "requestHeaderNames": [
+        "accept",
+        "access-control-request-headers",
+        "access-control-request-method",
+        "origin",
+        "sec-fetch-mode",
+        "user-agent"
+      ],
+      "extraRequestHeaderNames": [
+        "accept",
+        "accept-encoding",
+        "accept-language",
+        "access-control-request-headers",
+        "access-control-request-method",
+        "cache-control",
+        "origin",
+        "pragma",
+        "priority",
+        "sec-fetch-dest",
+        "sec-fetch-mode",
+        "sec-fetch-site",
+        "user-agent"
+      ],
+      "extraHttpStatus": 204,
+      "extraCorsResponseHeaders": {
+        "access-control-allow-headers": "Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since, Accept-Encoding, X-GitHub-OTP, X-Requested-With, User-Agent, GraphQL-Features, X-Github-Next-Global-ID, X-GitHub-Api-Version, X-Fetch-Nonce, Copilot-Integration-Id, DD-CLIENT-TOKEN, X-Client-Application, X-Experiment-Commit-Agent-Version",
+        "access-control-allow-methods": "GET, POST, PATCH, PUT, DELETE",
+        "access-control-allow-origin": "*",
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset",
+        "access-control-max-age": "86400"
+      },
+      "httpStatus": 204,
+      "corsResponseHeaders": {
+        "access-control-allow-headers": "Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since, Accept-Encoding, X-GitHub-OTP, X-Requested-With, User-Agent, GraphQL-Features, X-Github-Next-Global-ID, X-GitHub-Api-Version, X-Fetch-Nonce, Copilot-Integration-Id, DD-CLIENT-TOKEN, X-Client-Application, X-Experiment-Commit-Agent-Version",
+        "access-control-allow-methods": "GET, POST, PATCH, PUT, DELETE",
+        "access-control-allow-origin": "*",
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset",
+        "access-control-max-age": "86400"
+      }
+    },
+    {
+      "probe": "direct-default-error",
+      "endpoint": "repository-secret-public-key",
+      "method": "GET",
+      "requestHeaderNames": [
+        "accept",
+        "authorization",
+        "referer",
+        "sec-ch-ua",
+        "sec-ch-ua-mobile",
+        "sec-ch-ua-platform",
+        "user-agent",
+        "x-github-api-version"
+      ],
+      "extraRequestHeaderNames": [
+        "accept",
+        "accept-encoding",
+        "accept-language",
+        "authorization",
+        "origin",
+        "priority",
+        "sec-ch-ua",
+        "sec-ch-ua-mobile",
+        "sec-ch-ua-platform",
+        "sec-fetch-dest",
+        "sec-fetch-mode",
+        "sec-fetch-site",
+        "user-agent",
+        "x-github-api-version"
+      ],
+      "extraHttpStatus": 401,
+      "extraCorsResponseHeaders": {
+        "access-control-allow-origin": "*",
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset"
+      },
+      "httpStatus": 401,
+      "corsResponseHeaders": {
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset",
+        "access-control-allow-origin": "*"
+      }
+    },
+    {
+      "probe": "direct-default-error",
+      "endpoint": "repository-secret-public-key",
+      "method": "OPTIONS",
+      "requestHeaderNames": [
+        "accept",
+        "access-control-request-headers",
+        "access-control-request-method",
+        "origin",
+        "sec-fetch-mode",
+        "user-agent"
+      ],
+      "extraRequestHeaderNames": [
+        "accept",
+        "accept-encoding",
+        "accept-language",
+        "access-control-request-headers",
+        "access-control-request-method",
+        "origin",
+        "priority",
+        "sec-fetch-dest",
+        "sec-fetch-mode",
+        "sec-fetch-site",
+        "user-agent"
+      ],
+      "extraHttpStatus": 204,
+      "extraCorsResponseHeaders": {
+        "access-control-allow-headers": "Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since, Accept-Encoding, X-GitHub-OTP, X-Requested-With, User-Agent, GraphQL-Features, X-Github-Next-Global-ID, X-GitHub-Api-Version, X-Fetch-Nonce, Copilot-Integration-Id, DD-CLIENT-TOKEN, X-Client-Application, X-Experiment-Commit-Agent-Version",
+        "access-control-allow-methods": "GET, POST, PATCH, PUT, DELETE",
+        "access-control-allow-origin": "*",
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset",
+        "access-control-max-age": "86400"
+      },
+      "httpStatus": 204,
+      "corsResponseHeaders": {
+        "access-control-allow-headers": "Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since, Accept-Encoding, X-GitHub-OTP, X-Requested-With, User-Agent, GraphQL-Features, X-Github-Next-Global-ID, X-GitHub-Api-Version, X-Fetch-Nonce, Copilot-Integration-Id, DD-CLIENT-TOKEN, X-Client-Application, X-Experiment-Commit-Agent-Version",
+        "access-control-allow-methods": "GET, POST, PATCH, PUT, DELETE",
+        "access-control-allow-origin": "*",
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset",
+        "access-control-max-age": "86400"
+      }
+    },
+    {
+      "probe": "direct-default-manual",
+      "endpoint": "repository-secret-public-key",
+      "method": "GET",
+      "requestHeaderNames": [
+        "accept",
+        "authorization",
+        "referer",
+        "sec-ch-ua",
+        "sec-ch-ua-mobile",
+        "sec-ch-ua-platform",
+        "user-agent",
+        "x-github-api-version"
+      ],
+      "extraRequestHeaderNames": [
+        "accept",
+        "accept-encoding",
+        "accept-language",
+        "authorization",
+        "origin",
+        "priority",
+        "sec-ch-ua",
+        "sec-ch-ua-mobile",
+        "sec-ch-ua-platform",
+        "sec-fetch-dest",
+        "sec-fetch-mode",
+        "sec-fetch-site",
+        "user-agent",
+        "x-github-api-version"
+      ],
+      "extraHttpStatus": 401,
+      "extraCorsResponseHeaders": {
+        "access-control-allow-origin": "*",
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset"
+      },
+      "httpStatus": 401,
+      "corsResponseHeaders": {
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset",
+        "access-control-allow-origin": "*"
+      }
+    },
+    {
+      "probe": "direct-no-store-error",
+      "endpoint": "repository-secret-public-key",
+      "method": "GET",
+      "requestHeaderNames": [
+        "accept",
+        "authorization",
+        "referer",
+        "sec-ch-ua",
+        "sec-ch-ua-mobile",
+        "sec-ch-ua-platform",
+        "user-agent",
+        "x-github-api-version"
+      ],
+      "extraRequestHeaderNames": [
+        "accept",
+        "accept-encoding",
+        "accept-language",
+        "authorization",
+        "cache-control",
+        "origin",
+        "pragma",
+        "priority",
+        "sec-ch-ua",
+        "sec-ch-ua-mobile",
+        "sec-ch-ua-platform",
+        "sec-fetch-dest",
+        "sec-fetch-mode",
+        "sec-fetch-site",
+        "user-agent",
+        "x-github-api-version"
+      ],
+      "extraHttpStatus": 401,
+      "extraCorsResponseHeaders": {
+        "access-control-allow-origin": "*",
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset"
+      },
+      "httpStatus": 401,
+      "corsResponseHeaders": {
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset",
+        "access-control-allow-origin": "*"
+      }
+    },
+    {
+      "probe": "direct-no-store-error",
+      "endpoint": "repository-secret-public-key",
+      "method": "OPTIONS",
+      "requestHeaderNames": [
+        "accept",
+        "access-control-request-headers",
+        "access-control-request-method",
+        "origin",
+        "sec-fetch-mode",
+        "user-agent"
+      ],
+      "extraRequestHeaderNames": [
+        "accept",
+        "accept-encoding",
+        "accept-language",
+        "access-control-request-headers",
+        "access-control-request-method",
+        "cache-control",
+        "origin",
+        "pragma",
+        "priority",
+        "sec-fetch-dest",
+        "sec-fetch-mode",
+        "sec-fetch-site",
+        "user-agent"
+      ],
+      "extraHttpStatus": 204,
+      "extraCorsResponseHeaders": {
+        "access-control-allow-headers": "Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since, Accept-Encoding, X-GitHub-OTP, X-Requested-With, User-Agent, GraphQL-Features, X-Github-Next-Global-ID, X-GitHub-Api-Version, X-Fetch-Nonce, Copilot-Integration-Id, DD-CLIENT-TOKEN, X-Client-Application, X-Experiment-Commit-Agent-Version",
+        "access-control-allow-methods": "GET, POST, PATCH, PUT, DELETE",
+        "access-control-allow-origin": "*",
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset",
+        "access-control-max-age": "86400"
+      },
+      "httpStatus": 204,
+      "corsResponseHeaders": {
+        "access-control-allow-headers": "Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since, Accept-Encoding, X-GitHub-OTP, X-Requested-With, User-Agent, GraphQL-Features, X-Github-Next-Global-ID, X-GitHub-Api-Version, X-Fetch-Nonce, Copilot-Integration-Id, DD-CLIENT-TOKEN, X-Client-Application, X-Experiment-Commit-Agent-Version",
+        "access-control-allow-methods": "GET, POST, PATCH, PUT, DELETE",
+        "access-control-allow-origin": "*",
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset",
+        "access-control-max-age": "86400"
+      }
+    },
+    {
+      "probe": "direct-no-store-manual",
+      "endpoint": "repository-secret-public-key",
+      "method": "GET",
+      "requestHeaderNames": [
+        "accept",
+        "authorization",
+        "referer",
+        "sec-ch-ua",
+        "sec-ch-ua-mobile",
+        "sec-ch-ua-platform",
+        "user-agent",
+        "x-github-api-version"
+      ],
+      "extraRequestHeaderNames": [
+        "accept",
+        "accept-encoding",
+        "accept-language",
+        "authorization",
+        "cache-control",
+        "origin",
+        "pragma",
+        "priority",
+        "sec-ch-ua",
+        "sec-ch-ua-mobile",
+        "sec-ch-ua-platform",
+        "sec-fetch-dest",
+        "sec-fetch-mode",
+        "sec-fetch-site",
+        "user-agent",
+        "x-github-api-version"
+      ],
+      "extraHttpStatus": 401,
+      "extraCorsResponseHeaders": {
+        "access-control-allow-origin": "*",
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset"
+      },
+      "httpStatus": 401,
+      "corsResponseHeaders": {
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset",
+        "access-control-allow-origin": "*"
+      }
+    },
+    {
+      "probe": "direct-no-store-manual",
+      "endpoint": "repository-secret-public-key",
+      "method": "OPTIONS",
+      "requestHeaderNames": [
+        "accept",
+        "access-control-request-headers",
+        "access-control-request-method",
+        "origin",
+        "sec-fetch-mode",
+        "user-agent"
+      ],
+      "extraRequestHeaderNames": [
+        "accept",
+        "accept-encoding",
+        "accept-language",
+        "access-control-request-headers",
+        "access-control-request-method",
+        "cache-control",
+        "origin",
+        "pragma",
+        "priority",
+        "sec-fetch-dest",
+        "sec-fetch-mode",
+        "sec-fetch-site",
+        "user-agent"
+      ],
+      "extraHttpStatus": 204,
+      "extraCorsResponseHeaders": {
+        "access-control-allow-headers": "Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since, Accept-Encoding, X-GitHub-OTP, X-Requested-With, User-Agent, GraphQL-Features, X-Github-Next-Global-ID, X-GitHub-Api-Version, X-Fetch-Nonce, Copilot-Integration-Id, DD-CLIENT-TOKEN, X-Client-Application, X-Experiment-Commit-Agent-Version",
+        "access-control-allow-methods": "GET, POST, PATCH, PUT, DELETE",
+        "access-control-allow-origin": "*",
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset",
+        "access-control-max-age": "86400"
+      },
+      "httpStatus": 204,
+      "corsResponseHeaders": {
+        "access-control-allow-headers": "Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since, Accept-Encoding, X-GitHub-OTP, X-Requested-With, User-Agent, GraphQL-Features, X-Github-Next-Global-ID, X-GitHub-Api-Version, X-Fetch-Nonce, Copilot-Integration-Id, DD-CLIENT-TOKEN, X-Client-Application, X-Experiment-Commit-Agent-Version",
+        "access-control-allow-methods": "GET, POST, PATCH, PUT, DELETE",
+        "access-control-allow-origin": "*",
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, X-GitHub-Edge-Region, Deprecation, Sunset",
+        "access-control-max-age": "86400"
+      }
+    }
+  ],
+  "actualHttpsPageVerified": true,
+  "readOnlyApiRequestsObserved": 11
+}
