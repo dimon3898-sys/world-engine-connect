@@ -1,0 +1,46 @@
+name: Read-only GitHub browser CORS diagnosis
+on:
+  push:
+    branches: [development/github-save-fix-20261018]
+    paths:
+      - .github/pages-check/github-network.mjs
+      - .github/workflows/github-network-diagnosis.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser-diagnosis:
+    if: github.repository == 'dimon3898-sys/world-engine-connect' && github.event.repository.private == false && github.ref == 'refs/heads/development/github-save-fix-20261018'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Locked browser control dependency
+        working-directory: .github/pages-check
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Read-only real API preflight and browser request comparison
+        env:
+          CHROMIUM_EXECUTABLE: /usr/bin/google-chrome
+          PAGES_EVIDENCE_DIR: ${{ runner.temp }}/github-diagnosis
+        run: node .github/pages-check/github-network.mjs
+      - name: Persist safe diagnosis only
+        env:
+          EVIDENCE_SOURCE: ${{ runner.temp }}/github-diagnosis
+        run: |
+          python3 - <<'PY'
+          import os,json,shutil
+          from pathlib import Path
+          p=Path(os.environ['EVIDENCE_SOURCE'])/'GITHUB_NETWORK_DIAGNOSIS.json'
+          d=json.loads(p.read_text())
+          assert d['credentialsUsed'] is False and d['gpuExecuted'] is False
+          target=Path('verification')/os.environ['GITHUB_SHA']
+          target.mkdir(parents=True,exist_ok=True)
+          shutil.copyfile(p,target/p.name)
+          PY
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add "verification/${GITHUB_SHA}"
+          git commit -m "diagnosis: preserve read-only real GitHub browser findings"
+          git push origin HEAD:development/github-save-fix-20261018
