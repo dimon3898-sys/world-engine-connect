@@ -21,6 +21,7 @@
     "config.js"
   ],
   "githubSaveFixBranch": "development/github-save-fix-20261018",
+  "githubSaveFixVerificationRun": "https://github.com/dimon3898-sys/world-engine-connect/actions/runs/39107484423",
   "githubSaveRetryChecks": {
     "coreContracts": 39,
     "mobileAssertions": 789,
