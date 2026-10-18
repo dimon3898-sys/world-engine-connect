@@ -46,6 +46,7 @@ try {
   const context = await browser.newContext({ viewport: result.viewport, isMobile: true, hasTouch: true });
   const page = await context.newPage();
   let scriptErrors = 0, providerRequests = 0, authorizationChecked = false;
+  let githubReadOnlyRequests = 0;
   const browserAssets = {};
   page.on('pageerror', () => scriptErrors++);
   page.on('response', async response => {
@@ -60,6 +61,12 @@ try {
   await page.route('**/*', async route => {
     const target = new URL(route.request().url());
     if (target.origin === new URL(url).origin) return route.continue();
+    if (target.origin === 'https://api.github.com' && !target.search
+        && target.pathname === '/repos/dimon3898-sys/yeonhwarok-free/actions/secrets/WORLD_ENGINE_STUDIO_BACKUP_KEY'
+        && ['GET', 'OPTIONS'].includes(route.request().method())) {
+      githubReadOnlyRequests++;
+      return route.continue();
+    }
     providerRequests++;
     if (enabled && target.origin === 'https://www.dropbox.com' && target.pathname === '/oauth2/authorize') {
       const q = target.searchParams;
@@ -92,6 +99,22 @@ try {
   for (const name of requiredInBrowser) {
     assert.equal(browserAssets[name]?.status, 200, 'browser response ' + name);
     assert.equal(browserAssets[name]?.sha256, expected[name], 'browser deployed hash ' + name);
+  }
+  if (enabled) {
+    const code = await page.evaluate(async () => {
+      try {
+        const config = window.WORLD_CONNECT_CONFIG;
+        const client = window.WorldDropboxConnect.createClient({ redirectUri: config.redirectUri,
+          allowedRedirectUris: config.allowedRedirectUris, storage: sessionStorage, sodium: window.sodium });
+        // Deliberately invalid, non-secret probe. No write or real credential used.
+        await client.githubPreflight('invalid_network_probe_1234567890');
+        return 'UNEXPECTED_AUTHENTICATION_SUCCESS';
+      } catch (error) { return /^[A-Z][A-Z0-9_]+$/.test(error.message) ? error.message : 'SAFE_PROBE_FAILURE'; }
+    });
+    assert.equal(code, 'GITHUB_HTTP_401');
+    assert.ok(githubReadOnlyRequests >= 1);
+    result.githubLiveReadOnly = { corsResponseReadable: true, invalidAuthorizationRejected: true,
+      expectedCode: 'GITHUB_HTTP_401', realSecretWritten: false };
   }
   await page.screenshot({ path: resolve(output, 'MOBILE_CONNECT.png'), fullPage: true });
   if (enabled) {
