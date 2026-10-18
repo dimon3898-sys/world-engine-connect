@@ -4,6 +4,9 @@ on:
     branches: [main]
     paths:
       - config.js
+      - connect-core.js
+      - connect.js
+      - index.html
       - SOURCE.json
       - .github/pages-check/**
       - .github/workflows/verify-pages.yml

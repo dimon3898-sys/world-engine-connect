@@ -1,0 +1,54 @@
+name: Focused GitHub save and mobile retry checks
+on:
+  push:
+    branches: [development/github-save-fix-20261018]
+    paths:
+      - connect-core.js
+      - connect.js
+      - index.html
+      - .github/pages-check/core.test.mjs
+      - .github/pages-check/transport.test.mjs
+      - .github/pages-check/retry-mobile.mjs
+      - .github/workflows/github-save-check.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cpu-mobile-safety:
+    if: github.repository == 'dimon3898-sys/world-engine-connect' && github.event.repository.private == false && github.ref == 'refs/heads/development/github-save-fix-20261018'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Locked dependency without lifecycle scripts
+        working-directory: .github/pages-check
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Focused core contracts and safe error classification
+        run: node --test .github/pages-check/core.test.mjs .github/pages-check/transport.test.mjs
+      - name: Mobile retries and real sealed-box encryption with synthetic providers
+        env:
+          CHROMIUM_EXECUTABLE: /usr/bin/google-chrome
+          PAGES_EVIDENCE_DIR: ${{ runner.temp }}/retry-evidence
+        run: node .github/pages-check/retry-mobile.mjs
+      - name: Persist allowlisted successful synthetic proof
+        env:
+          EVIDENCE_SOURCE: ${{ runner.temp }}/retry-evidence
+        run: |
+          python3 - <<'PY'
+          import os,json,shutil
+          from pathlib import Path
+          source=Path(os.environ['EVIDENCE_SOURCE'])/'MOBILE_RETRY_VERIFICATION.json'
+          d=json.loads(source.read_text())
+          assert d['status']=='PASS' and d['gpuExecuted'] is False
+          assert d['syntheticProvidersOnly'] is True and d['realGitHubSecretWritten'] is False
+          target=Path('verification')/os.environ['GITHUB_SHA']
+          target.mkdir(parents=True,exist_ok=True)
+          shutil.copyfile(source,target/source.name)
+          PY
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add "verification/${GITHUB_SHA}"
+          git commit -m "proof: persist focused mobile save retry checks"
+          git push origin HEAD:development/github-save-fix-20261018

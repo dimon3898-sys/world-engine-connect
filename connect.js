@@ -6,13 +6,17 @@
   const api = window.WorldDropboxConnect;
   let client = null, grant = null, pat = "", appKey = "", busy = false;
   let checked = false, savingDone = false, currentRun = null, timer = null;
-  let previousRuns = new Set(), pollCount = 0;
+  let previousRuns = null, pollCount = 0;
+  let retryAction = null, secretsSaved = false, dispatchAttempted = false;
   const errors = {
     APP_KEY_INVALID: "App key를 확인해 주세요. 기존 App Folder 앱의 Settings에 있습니다.",
     GITHUB_CREDENTIAL_INVALID: "GitHub의 일회 연결 권한을 비공개 입력칸에 넣어 주세요.",
     GITHUB_HTTP_401: "GitHub 인증이 만료됐거나 유효하지 않습니다. 새 권한을 발급해 주세요.",
     GITHUB_HTTP_403: "이 저장소의 Secrets·Actions 쓰기 권한이 필요합니다. 권한 설정을 확인해 주세요.",
     GITHUB_HTTP_404: "이 저장소 또는 검증 작업에 접근할 수 없습니다. 저장소 선택과 권한을 확인해 주세요.",
+    GITHUB_NETWORK_OR_CORS_FAILED: "GitHub 응답을 브라우저에서 읽지 못했습니다. 네트워크 또는 브라우저 차단일 수 있으며, 권한 오류로 확인된 것은 아닙니다. Dropbox 인증을 처음부터 다시 하지 않고 GitHub 단계에서 이어갈 수 있습니다. 연결을 확인한 뒤 아래 버튼으로 다시 시도해 주세요.",
+    GITHUB_REQUEST_TIMEOUT: "GitHub 응답 대기 시간이 지났습니다. Dropbox 승인은 유지됩니다. GitHub 단계만 다시 시도해 주세요.",
+    GITHUB_BROWSER_OFFLINE: "휴대폰의 인터넷 연결이 끊겼습니다. 다시 연결한 뒤 GitHub 단계만 다시 시도해 주세요.",
     APP_SECRET_REQUIRED: "기존 실행에 필요한 App secret이 아직 없습니다. 아래 비공개 입력칸에 넣어 주세요.",
     EXISTING_BACKUP_KEY_REQUIRED: "기존 백업은 있지만 암호화 키가 연결되지 않았습니다. 기존 키를 GitHub Secret에 복원해야 합니다. 새 키로 바꾸지 않습니다.",
     DROPBOX_AUTHORIZATION_DENIED: "Dropbox 접근 승인이 취소됐습니다. 연결 버튼으로 다시 시작할 수 있습니다.",
@@ -31,7 +35,15 @@
     const code = error && typeof error.message === "string" && /^[A-Z][A-Z0-9_]{2,95}$/.test(error.message) ? error.message : "CONNECTION_BLOCKED";
     $("error").textContent = errors[code] || "연결을 완료하지 못했습니다. 오류 코드: " + code + ". 저장된 기존 백업은 유지됩니다.";
     $("error").hidden = false;
-    $("restart").hidden = false;
+    const canRetry = code.startsWith("GITHUB_") && !!retryAction && (!!grant || secretsSaved || savingDone);
+    $("retryGithub").hidden = !canRetry;
+    $("retryGithub").textContent = secretsSaved ? "저장된 연결의 검증 단계 다시 확인" : "GitHub 단계만 다시 시도";
+    $("restart").hidden = canRetry;
+    if (secretsSaved && ["GITHUB_HTTP_401", "GITHUB_HTTP_403"].includes(code)) {
+      // Reuse the existing private inputs, not another OAuth grant or public token URL.
+      $("verification").prepend($("githubCredentials"));
+      screen("verification");
+    }
   }
   function screen(id) {
     for (const name of ["consent", "saving", "verification"]) $(name).hidden = name !== id;
@@ -46,32 +58,36 @@
     $("checkGithub").disabled = busy;
     $("saveConnection").disabled = busy || !checked || savingDone;
     $("refreshStatus").disabled = busy;
+    $("retryGithub").disabled = busy;
   }
   async function task(action) {
     if (busy) return;
-    busy = true; buttons(); $("error").hidden = true;
+    busy = true; buttons(); $("error").hidden = true; $("retryGithub").hidden = true;
+    retryAction = action;
     try { await action(); } catch (error) { state(""); showError(error); }
     finally { busy = false; buttons(); }
   }
   function forget() {
     if (grant) { grant.accessToken = ""; grant.refreshToken = ""; }
-    grant = null; pat = "";
+    grant = null; pat = ""; retryAction = null;
     $("githubCredential").value = ""; $("appSecret").value = "";
     if (timer !== null) clearTimeout(timer);
     timer = null;
   }
   window.addEventListener("pagehide", forget);
   $("restart").addEventListener("click", () => { forget(); location.replace(location.pathname); });
+  $("retryGithub").addEventListener("click", () => { if (retryAction) task(retryAction); });
 
   async function checkRun() {
     if (!pat || !savingDone) return;
     const runs = await client.workflowStatus(pat, currentRun ? currentRun.id : undefined);
-    const candidate = currentRun ? runs[0] : runs.find(run => !previousRuns.has(run.id));
+    const candidate = currentRun ? runs[0] : runs.find(run => previousRuns && !previousRuns.has(run.id));
     if (!candidate) {
-      $("verificationState").textContent = "검증 실행을 기다리고 있습니다. 브라우저를 닫아도 이미 시작된 검사는 계속됩니다.";
+      $("verificationState").textContent = "연결 설정은 저장됐습니다. 검증 실행을 확인하고 있습니다. 요청 응답이 끊겨도 중복 검증을 시작하지 않습니다.";
     } else {
       currentRun = candidate;
       $("runLink").href = candidate.url; $("runLink").hidden = false;
+      $("runLink").textContent = "검증 기록 보기";
       const proof = await client.workflowProof(candidate.id, candidate.attempt);
       if (proof) {
         if (proof.status === "PASS") {
@@ -92,7 +108,46 @@
         : "무료 CPU 검증이 진행 중입니다. 실제 백업·복구 결과가 기록되면 여기에 표시합니다.";
     }
     if (++pollCount < 24) timer = setTimeout(() => task(checkRun), 15000);
-    else state("자동 상태 확인을 마쳤습니다. 검증 기록 보기에서 결과를 확인할 수 있습니다.");
+    else state(currentRun ? "자동 상태 확인을 마쳤습니다. 검증 기록 보기에서 결과를 확인할 수 있습니다." : "연결 설정은 저장됐지만 검증 실행은 아직 확인되지 않았습니다. 검증 상태 새로 확인을 눌러 확인할 수 있습니다. Dropbox 재승인은 필요하지 않습니다.");
+  }
+
+  async function saveAndVerify() {
+    if (!secretsSaved) {
+      state("Secret을 암호화해 저장하고 있습니다.");
+      await client.configure({ pat, grant, appKey, appSecret: $("appSecret").value.trim() });
+      secretsSaved = true;
+      $("appSecret").value = "";
+      if (grant) { grant.accessToken = ""; grant.refreshToken = ""; }
+      grant = null;
+    }
+    // Save phase is complete. A later network error retries only verification.
+    if (previousRuns === null) previousRuns = new Set((await client.workflowStatus(pat)).map(run => run.id));
+    if (!dispatchAttempted) {
+      try { await client.dispatch(pat); }
+      finally {
+        dispatchAttempted = client.dispatchState() !== "not_attempted";
+        savingDone = dispatchAttempted;
+        if (dispatchAttempted) {
+          screen("verification");
+          $("runLink").href = "https://github.com/dimon3898-sys/yeonhwarok-free/actions/workflows/studio-dropbox-mobile-v1.yml";
+          $("runLink").textContent = "검증 실행 목록 보기";
+          $("runLink").hidden = false;
+        }
+      }
+    }
+    state("연결 설정 저장 완료 · 무료 실제 백업 검증 상태를 확인합니다.");
+    await checkRun();
+  }
+
+  async function checkGithubAccess() {
+    // A failed request must not erase the credential already held in this tab.
+    pat = $("githubCredential").value.trim() || pat;
+    $("githubCredential").value = "";
+    const result = await client.githubPreflight(pat);
+    $("appSecretArea").hidden = result.existing.appSecret;
+    checked = true;
+    if (secretsSaved) { await saveAndVerify(); return; }
+    state(result.existing.appSecret ? "GitHub 권한을 확인했습니다. 기존 키와 앱 설정을 유지합니다." : "GitHub 권한을 확인했습니다. 최초 App secret 설정만 추가해 주세요.");
   }
 
   if (window.__worldConnectBlocked || !window.isSecureContext || !config || config.enabled !== true || !config.redirectUri) {
@@ -117,28 +172,8 @@
       location.assign(flow.authorizationURL);
     }));
     $("githubCredential").addEventListener("input", () => { pat = ""; checked = false; buttons(); });
-    $("checkGithub").addEventListener("click", () => task(async () => {
-      pat = $("githubCredential").value.trim();
-      $("githubCredential").value = "";
-      const result = await client.githubPreflight(pat);
-      $("appSecretArea").hidden = result.existing.appSecret;
-      checked = true;
-      state(result.existing.appSecret ? "GitHub 권한을 확인했습니다. 기존 키와 앱 설정을 유지합니다." : "GitHub 권한을 확인했습니다. 최초 App secret 설정만 추가해 주세요.");
-    }));
-    $("saveConnection").addEventListener("click", () => task(async () => {
-      state("Secret을 암호화해 저장하고 있습니다.");
-      await client.configure({ pat, grant, appKey, appSecret: $("appSecret").value.trim() });
-      $("appSecret").value = "";
-      // Record existing run IDs first so a previous successful run cannot be
-      // mistaken for this new connection's proof.
-      previousRuns = new Set((await client.workflowStatus(pat)).map(run => run.id));
-      await client.dispatch(pat);
-      savingDone = true;
-      if (grant) { grant.accessToken = ""; grant.refreshToken = ""; }
-      grant = null;
-      screen("verification"); state("연결 설정 저장 완료 · 무료 실제 백업 검증을 시작했습니다.");
-      await checkRun();
-    }));
+    $("checkGithub").addEventListener("click", () => task(checkGithubAccess));
+    $("saveConnection").addEventListener("click", () => task(saveAndVerify));
     $("refreshStatus").addEventListener("click", () => task(checkRun));
     const callback = window.__worldConnectCallback;
     delete window.__worldConnectCallback;

@@ -73,6 +73,7 @@
     if (typeof fetcher !== "function") fail("FETCH_REQUIRED");
     let lastConfigured = false;
     let configuring = false;
+    let verificationDispatchState = "not_attempted";
 
     async function request(url, init, expected, code, limit) {
       const controller = new AbortController();
@@ -107,6 +108,10 @@
       } catch (error) {
         // Only our enumerated diagnostics leave this boundary. Provider bodies and URLs never do.
         if (error && typeof error.message === "string" && new RegExp("^" + code + "_(HTTP_[0-9A-Z]+|RESPONSE_(TOO_LARGE|INVALID))$").test(error.message)) throw error;
+        if (controller.signal.aborted) fail(code + "_REQUEST_TIMEOUT");
+        if (globalThis.navigator && globalThis.navigator.onLine === false) fail(code + "_BROWSER_OFFLINE");
+        // A browser intentionally does not expose whether a rejected fetch was
+        // DNS/TLS, filtering, or CORS. Do not label this as a permission error.
         fail(code + "_NETWORK_OR_CORS_FAILED");
       } finally { clearTimeout(timer); }
     }
@@ -267,9 +272,20 @@
     }
     async function dispatch(pat) {
       if (!lastConfigured) fail("SECRETS_NOT_CONFIGURED_THIS_SESSION");
+      if (verificationDispatchState === "uncertain") fail("GITHUB_DISPATCH_OUTCOME_UNKNOWN");
+      if (verificationDispatchState === "accepted") return { dispatched: true, workflow: WORKFLOW, ref: REF, backupVerified: false, gpuAllowed: false };
       const { existing } = await githubPreflight(pat);
       if (!Object.values(existing).every(Boolean)) fail("GITHUB_SECRET_METADATA_INCOMPLETE");
-      await github(pat, "/actions/workflows/" + WORKFLOW + "/dispatches", "POST", { ref: REF }, [204]);
+      verificationDispatchState = "uncertain";
+      try {
+        await github(pat, "/actions/workflows/" + WORKFLOW + "/dispatches", "POST", { ref: REF }, [204]);
+        verificationDispatchState = "accepted";
+      } catch (error) {
+        // A readable client rejection means no job was accepted. A lost response
+        // or server error remains uncertain and must be checked, never reposted.
+        if (error && /^GITHUB_HTTP_4[0-9]{2}$/.test(error.message)) verificationDispatchState = "not_attempted";
+        throw error;
+      }
       return { dispatched: true, workflow: WORKFLOW, ref: REF, backupVerified: false, gpuAllowed: false };
     }
     async function workflowStatus(pat, runId) {
@@ -322,7 +338,8 @@
         metadataReadVerified: proof.metadataReadVerified, externalStorageRecoveryVerified: proof.externalStorageRecoveryVerified,
         gpuExecuted: false, productionRenderingStarted: false, ...(proof.status === "PASS" ? { proofId: proof.proofId, checkpointId: proof.checkpointId, expiresUnix: proof.expiresUnix } : {}) };
     }
-    return Object.freeze({ begin, pending, finish, githubPreflight, configure, dispatch, workflowStatus, workflowProof });
+    return Object.freeze({ begin, pending, finish, githubPreflight, configure, dispatch,
+      dispatchState: () => verificationDispatchState, workflowStatus, workflowProof });
   }
   return Object.freeze({ createClient, validateAppKey, callbackURL, makePkce, REPOSITORY, SCOPES, NAMES, WORKFLOW, REF, SOURCE_IMAGE });
 });
