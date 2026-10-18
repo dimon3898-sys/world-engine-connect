@@ -1,0 +1,38 @@
+name: Verify public HTTPS and mobile Dropbox connection screen
+on:
+  push:
+    branches: [main]
+    paths:
+      - config.js
+      - SOURCE.json
+      - .github/pages-check/**
+      - .github/workflows/verify-pages.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: world-engine-connect-public-check
+  cancel-in-progress: false
+jobs:
+  public-mobile:
+    if: github.repository == 'dimon3898-sys/world-engine-connect' && github.event.repository.private == false && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Install locked CPU browser control dependency
+        working-directory: .github/pages-check
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Verify immutable public assets and actual mobile HTTPS navigation
+        env:
+          CHROMIUM_EXECUTABLE: /usr/bin/google-chrome
+          PAGES_EVIDENCE_DIR: ${{ runner.temp }}/pages-evidence
+        run: node .github/pages-check/check.mjs
+      - name: Save public-only validation and mobile screenshots
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: public-pages-verification
+          path: ${{ runner.temp }}/pages-evidence
+          retention-days: 14
+          if-no-files-found: error
