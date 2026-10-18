@@ -1,6 +1,6 @@
-/* Hosting is account-authorized separately. No invented live callback URL. */
+/* Exact HTTPS callback: verified public Pages deployment. No wildcard origins. */
 window.WORLD_CONNECT_CONFIG = Object.freeze({
-  enabled: false,
-  redirectUri: null,
-  allowedRedirectUris: Object.freeze([])
+  enabled: true,
+  redirectUri: 'https://dimon3898-sys.github.io/world-engine-connect/',
+  allowedRedirectUris: Object.freeze(['https://dimon3898-sys.github.io/world-engine-connect/'])
 });

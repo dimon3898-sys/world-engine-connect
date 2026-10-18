@@ -1,6 +1,31 @@
 {
   "assets": {
     "callback-scrub.js": "2fe2925d83e40d64ba38c69170890b3292e92bdae072cd56a74c4efb95933065",
+    "config.js": "e48a456fca6fa820cf1a61f91ed2360338c50b68db21f9f7d352daee5a40fcaf",
+    "connect-core.js": "9338e629d5b6477f3ba3463c3f7fdf4b5a9a4c8b39e2584eb0d1cc053b76ae10",
+    "connect.css": "b06240c870c21157fcf4297ffa586f1a35b4ae31615bdd707b42ce0614ae1220",
+    "connect.js": "3db543f540515599622d4a3f07dd71534440baf68200d210e4c26b5dc59ba20c",
+    "index.html": "2a413c8c87d662645a7e3c64dc93cd84e25a76aa67efb01d4c0519d8e4db4450",
+    "vendor/libsodium-wrappers.LICENSE": "051795a65af6a45e1022e56b01123e399d28c4d2680681d3e207df2669da5d85",
+    "vendor/libsodium-wrappers.js": "828884732c06fa4443688b33ceb4ab42e6e1b99200e4749be375faa289e94158",
+    "vendor/libsodium.LICENSE": "051795a65af6a45e1022e56b01123e399d28c4d2680681d3e207df2669da5d85",
+    "vendor/libsodium.js": "8abec6b42fafb418f58bff3fd665005b3e700ee02dae5042ce5704d27e6fcb23"
+  },
+  "configurationEnabled": true,
+  "deployedConfigurationChanges": [
+    "config.js"
+  ],
+  "gpuExecuted": false,
+  "httpsHttpVerified": true,
+  "pagesActivation": "BUILT_HTTPS_ENFORCED",
+  "publicVerificationCommit": "31974f7efb5a92eef1895761b310a80b1ec85724",
+  "publicVerificationRun": "https://github.com/dimon3898-sys/world-engine-connect/actions/runs/39104794558",
+  "readmeOriginalSha256": "58662ee222024f7abe2b0b9ee0fbab6b3c21997c0d86f63b05c5633fc951a93e",
+  "realBackupRestoreVerified": false,
+  "realDropboxConnectionVerified": false,
+  "schema": "WORLD_ENGINE_CONNECT_STATIC_SOURCE_V1",
+  "sourceAssetSha256": {
+    "callback-scrub.js": "2fe2925d83e40d64ba38c69170890b3292e92bdae072cd56a74c4efb95933065",
     "config.js": "8f78d88b92bf72ebbaff80cc969eafc5d8e4ccee55c443b6f28c8555b7ed60a5",
     "connect-core.js": "9338e629d5b6477f3ba3463c3f7fdf4b5a9a4c8b39e2584eb0d1cc053b76ae10",
     "connect.css": "b06240c870c21157fcf4297ffa586f1a35b4ae31615bdd707b42ce0614ae1220",
@@ -11,14 +36,10 @@
     "vendor/libsodium.LICENSE": "051795a65af6a45e1022e56b01123e399d28c4d2680681d3e207df2669da5d85",
     "vendor/libsodium.js": "8abec6b42fafb418f58bff3fd665005b3e700ee02dae5042ce5704d27e6fcb23"
   },
-  "configurationEnabled": false,
-  "gpuExecuted": false,
-  "httpsHttpVerified": false,
-  "pagesActivation": "BLOCKED_API_PERMISSION",
-  "readmeOriginalSha256": "58662ee222024f7abe2b0b9ee0fbab6b3c21997c0d86f63b05c5633fc951a93e",
-  "schema": "WORLD_ENGINE_CONNECT_STATIC_SOURCE_V1",
   "sourceCommit": "c3d8631088c4d26ed057eb8d18ecc00a18827b55",
   "sourcePath": "world-simulation-shorts-engine/recovery/studio-dropbox-mobile-v1/web",
   "sourceRepository": "dimon3898-sys/yeonhwarok-free",
-  "targetRepository": "dimon3898-sys/world-engine-connect"
+  "targetRepository": "dimon3898-sys/world-engine-connect",
+  "verificationScope": "Pre-activation published HTTPS, ten asset hashes and mobile browser; enabled OAuth entry rechecked by subsequent workflow.",
+  "verifiedCanonicalURL": "https://dimon3898-sys.github.io/world-engine-connect/"
 }

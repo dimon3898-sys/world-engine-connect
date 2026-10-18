@@ -18,6 +18,8 @@ jobs:
     if: github.repository == 'dimon3898-sys/world-engine-connect' && github.event.repository.private == false && github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     timeout-minutes: 12
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
       - name: Install locked CPU browser control dependency
@@ -36,3 +38,29 @@ jobs:
           path: ${{ runner.temp }}/pages-evidence
           retention-days: 14
           if-no-files-found: error
+      - name: Persist only successful public evidence for owner review
+        if: success()
+        env:
+          EVIDENCE_SOURCE: ${{ runner.temp }}/pages-evidence
+        run: |
+          test "${GITHUB_REPOSITORY}" = dimon3898-sys/world-engine-connect
+          test "${GITHUB_REF}" = refs/heads/main
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          import shutil
+          source = Path(os.environ['EVIDENCE_SOURCE'])
+          proof = json.loads((source / 'PAGES_VERIFICATION.json').read_text())
+          assert proof['status'] == 'PASS' and proof['credentialsUsed'] is False
+          assert proof['gpuExecuted'] is False and proof['commit'] == os.environ['GITHUB_SHA']
+          target = Path('verification') / os.environ['GITHUB_SHA']
+          target.mkdir(parents=True, exist_ok=True)
+          for name in ['PAGES_VERIFICATION.json', 'MOBILE_CONNECT.png', 'MOBILE_SETUP_DETAILS.png']:
+              if (source / name).is_file():
+                  shutil.copyfile(source / name, target / name)
+          PY
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add "verification/${GITHUB_SHA}"
+          git commit -m "proof: persist public HTTPS and mobile check ${GITHUB_SHA}"
+          git push origin HEAD:main
