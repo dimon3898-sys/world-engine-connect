@@ -16,6 +16,7 @@
 ## 실제 수정
 
 - GitHub 요청 실패 후 빈 입력으로 메모리에 남은 권한값을 덮어쓰던 재시도 결함을 수정했다.
+- 별도 결함으로 신규 Secret의 HTTP 201 성공 응답을 JSON 객체로만 해석하던 처리를 수정했다. 공식 OpenAPI가 정의하는 선택적 본문은 빈 응답·`null`도 허용하고, 크기 제한 및 후속 메타데이터 확인을 유지한다. 수정 전 빈 응답·`null` 회귀 2개는 `GITHUB_RESPONSE_INVALID`로 실패했고 수정 후 통과했다. 이는 최초 통신 오류와 다른 결함이다.
 - **GitHub 단계만 다시 시도** 버튼으로 해당 단계만 재시도한다. Dropbox grant와 GitHub 권한은 같은 탭의 메모리에만 유지한다.
 - HTTP 오류, 브라우저 offline, 자체 30초 timeout, 원인 미확정 fetch 실패를 구분한다. 원문 에러·토큰·요청 URL을 로그에 남기지 않는다.
 - Secret 저장 완료와 무료 검증 시작을 분리했다. 저장 후 상태 조회가 실패해도 Secret을 다시 PUT하지 않는다.
@@ -31,7 +32,9 @@
 
 기존 직접 GitHub API 경로가 실제 CORS 요청을 지원하므로 근거 없이 다른 서버로 토큰을 보내는 fallback은 추가하지 않았다. 서버 처리가 필요해진다면 별도로 승인된 인증 backend와 토큰 비저장·CSRF·권한 검증이 필요하다. 공개 무인증 프록시는 사용하지 않는다.
 
-무료 검사: 기존 core 계약 36개 재사용, transport 분류 6개, 모바일 재시도 8개 시나리오. 모바일 synthetic Secret PUT는 실제 libsodium으로 암호화하고 검사 키로 복호화해 검증한다. 실제 계정의 Secret 저장·Dropbox 백업 성공을 모의 검사 PASS로 대체하지 않는다.
+무료 검사: 기존 core 계약 36개 재사용, 신규 201 계약 3개, transport 분류 6개, 모바일 재시도 집중 시나리오. 모바일 synthetic Secret PUT는 실제 libsodium으로 암호화하고 검사 키로 복호화해 검증한다. 실제 계정의 Secret 저장·Dropbox 백업 성공을 모의 검사 PASS로 대체하지 않는다.
+
+201 계약 근거: [GitHub 공식 REST 문서](https://docs.github.com/rest/actions/secrets#create-or-update-a-repository-secret), [공식 OpenAPI](https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json), 확인한 원문 SHA-256 `3177ad6a86ca04c57a9bef3fc24e28a339efb8eb040c6f950af3d3ed2fee7fa3`. 실제 계정의 인증된 201 요청을 실행했다는 뜻은 아니다.
 
 ## 휴대폰에서 최소 작업
 

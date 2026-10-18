@@ -422,3 +422,27 @@ test('no localStorage, cookies, dynamic service endpoints or console sinks in co
   const source = await fs.readFile(new URL('../../connect-core.js', import.meta.url), 'utf8');
   for (const pattern of [/localStorage/, /document\.cookie/, /console\./, /eval\(/, /new Function/, /window\.location/]) assert.ok(!pattern.test(source));
 });
+
+// GitHub documents creation as 201 with no useful returned object; updates are 204.
+// This checks the response contract and mandatory readback, not live Secret writes.
+for (const createdBody of [null, 'null', '{}']) {
+  test('Secret creation 201 accepts ' + (createdBody === null ? 'empty body' : 'JSON ' + createdBody) + ' then verifies metadata', async () => {
+    let puts = 0, readbacks = 0;
+    const f = fixture({ existing: [core.NAMES.key, core.NAMES.appSecret], fetch(url, init, existing) {
+      if (url.endsWith('/public-key')) return reply({ key: PUB, key_id: '1234' });
+      const name = url.split('/').at(-1);
+      if (init.method === 'PUT') {
+        existing.add(name); puts++;
+        return new Response(createdBody, { status: 201, headers: { 'content-type': 'application/json' } });
+      }
+      if (puts && existing.has(name)) readbacks++;
+      return existing.has(name) ? reply({ name }) : reply({ message: 'Not Found' }, 404);
+    } });
+    const result = await f.client.configure({ pat: PAT, grant: validGrant(), appKey: APP });
+    assert.equal(result.secretsReady, true);
+    assert.equal(puts, 3);
+    assert.ok(readbacks >= 4);
+    assert.ok(!f.calls.some(call => call.init.method === 'PUT' &&
+      [core.NAMES.key, core.NAMES.appSecret].some(name => call.url.endsWith('/' + name))));
+  });
+}

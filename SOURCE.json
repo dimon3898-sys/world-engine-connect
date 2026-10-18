@@ -7,9 +7,9 @@
   "assets": {
     "callback-scrub.js": "2fe2925d83e40d64ba38c69170890b3292e92bdae072cd56a74c4efb95933065",
     "config.js": "e48a456fca6fa820cf1a61f91ed2360338c50b68db21f9f7d352daee5a40fcaf",
-    "connect-core.js": "182c8ff08c58dec7bd74da6c7141219f1539edb0ae4ce678ea9773a21de6ecda",
+    "connect-core.js": "57cca896565fdc676e4d7ecba2b1707c28a8a35442b3abc74ff5c9ea650fcd74",
     "connect.css": "b06240c870c21157fcf4297ffa586f1a35b4ae31615bdd707b42ce0614ae1220",
-    "connect.js": "d0a056407a1135c69fdff8c79e7c0597f9a33efb422cc31e49754822e8901f66",
+    "connect.js": "25ab60fc7bf2f32b32544985c47bce167a6e11c431fef334118440a37996d727",
     "index.html": "1922b158f80c916144351bd3825ae2cb51615ec5a131f42b8e637350bae7e573",
     "vendor/libsodium-wrappers.LICENSE": "051795a65af6a45e1022e56b01123e399d28c4d2680681d3e207df2669da5d85",
     "vendor/libsodium-wrappers.js": "828884732c06fa4443688b33ceb4ab42e6e1b99200e4749be375faa289e94158",
@@ -21,6 +21,13 @@
     "config.js"
   ],
   "githubSaveFixBranch": "development/github-save-fix-20261018",
+  "githubSaveRetryChecks": {
+    "coreContracts": 39,
+    "mobileAssertions": 789,
+    "mobileCases": 9,
+    "realAccountSecretWriteVerified": false,
+    "transportContracts": 6
+  },
   "githubTransportDiagnosisRun": "https://github.com/dimon3898-sys/world-engine-connect/actions/runs/39106636718",
   "gpuExecuted": false,
   "httpsHttpVerified": true,

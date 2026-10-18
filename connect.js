@@ -17,6 +17,7 @@
     GITHUB_NETWORK_OR_CORS_FAILED: "GitHub 응답을 브라우저에서 읽지 못했습니다. 네트워크 또는 브라우저 차단일 수 있으며, 권한 오류로 확인된 것은 아닙니다. Dropbox 인증을 처음부터 다시 하지 않고 GitHub 단계에서 이어갈 수 있습니다. 연결을 확인한 뒤 아래 버튼으로 다시 시도해 주세요.",
     GITHUB_REQUEST_TIMEOUT: "GitHub 응답 대기 시간이 지났습니다. Dropbox 승인은 유지됩니다. GitHub 단계만 다시 시도해 주세요.",
     GITHUB_BROWSER_OFFLINE: "휴대폰의 인터넷 연결이 끊겼습니다. 다시 연결한 뒤 GitHub 단계만 다시 시도해 주세요.",
+    WORKFLOW_PROOF_NETWORK_OR_CORS_FAILED: "연결 설정은 저장됐지만 GitHub의 검증 결과를 읽지 못했습니다. Dropbox 재승인 없이 검증 단계만 다시 확인할 수 있습니다.",
     APP_SECRET_REQUIRED: "기존 실행에 필요한 App secret이 아직 없습니다. 아래 비공개 입력칸에 넣어 주세요.",
     EXISTING_BACKUP_KEY_REQUIRED: "기존 백업은 있지만 암호화 키가 연결되지 않았습니다. 기존 키를 GitHub Secret에 복원해야 합니다. 새 키로 바꾸지 않습니다.",
     DROPBOX_AUTHORIZATION_DENIED: "Dropbox 접근 승인이 취소됐습니다. 연결 버튼으로 다시 시작할 수 있습니다.",
@@ -34,8 +35,11 @@
   function showError(error) {
     const code = error && typeof error.message === "string" && /^[A-Z][A-Z0-9_]{2,95}$/.test(error.message) ? error.message : "CONNECTION_BLOCKED";
     $("error").textContent = errors[code] || "연결을 완료하지 못했습니다. 오류 코드: " + code + ". 저장된 기존 백업은 유지됩니다.";
+    const stageLabels = { WORKFLOW_START: "무료 검증 시작", WORKFLOW_STATUS: "검증 상태 조회",
+      PUBLIC_KEY_READ: "GitHub 암호화 공개키 조회", SECRET_WRITE: "암호화된 Secret 저장", SECRET_METADATA_READ: "Secret 설정 상태 조회" };
+    if (error && Object.hasOwn(stageLabels, error.stage)) $("error").textContent += " 실패 단계: " + stageLabels[error.stage] + ".";
     $("error").hidden = false;
-    const canRetry = code.startsWith("GITHUB_") && !!retryAction && (!!grant || secretsSaved || savingDone);
+    const canRetry = (code.startsWith("GITHUB_") || code.startsWith("WORKFLOW_PROOF_")) && !!retryAction && (!!grant || secretsSaved || savingDone);
     $("retryGithub").hidden = !canRetry;
     $("retryGithub").textContent = secretsSaved ? "저장된 연결의 검증 단계 다시 확인" : "GitHub 단계만 다시 시도";
     $("restart").hidden = canRetry;

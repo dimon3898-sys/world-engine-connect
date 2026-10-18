@@ -23,7 +23,7 @@ const access = 'accessfixture'.repeat(3), refresh = 'refreshfixture'.repeat(3);
 const image = 'ghcr.io/dimon3898-sys/world-simulation-shorts-engine@sha256:6d2e87fc8fb7f10edc2ebb7f77b5d666e329904b9c37f7f060b289f943bdd9d0';
 const output = resolve(process.env.PAGES_EVIDENCE_DIR || '/tmp/world-engine-pages-evidence');
 mkdirSync(output, { recursive: true });
-const modes = ['preflight-network', 'preflight-401', 'preflight-403', 'saved-status-network', 'dispatch-preflight-network', 'dispatch-ambiguous', 'poll-network', 'poll-401-replace'];
+const modes = ['preflight-network', 'preflight-401', 'preflight-403', 'saved-status-network', 'dispatch-preflight-network', 'dispatch-ambiguous', 'poll-network', 'poll-401-replace', 'proof-network'];
 const result = {
   schema: 'WORLD_ENGINE_CONNECT_RETRY_MOBILE_V1', status: 'FAIL', checkedAt: new Date().toISOString(),
   viewport: { width: 412, height: 915 }, assertions: 0, cases: [],
@@ -43,6 +43,7 @@ try {
     const existing = new Set([names.key, names.appSecret]);
     let authorization, keypair, publicKey;
     let failed = false, tokenExchanges = 0, dispatches = 0, firstMetadataGets = 0, runsGets = 0, remoteRun = false;
+    let empty201Creates = 0, empty204Updates = 0;
     page.on('pageerror', () => errors.push('PAGE_SCRIPT_ERROR'));
     page.on('console', message => logs.push(message.text()));
     await page.route('**/*', async route => {
@@ -102,8 +103,12 @@ try {
           }, { sealed: sealed.encrypted_value, pair: keypair });
           const expected = name === names.appKey ? appKey : name === names.refresh ? refresh : 'WORLD_ENGINE_DROPBOX_BINDING_V1';
           check(decoded === expected, 'encrypted Secret decrypts to intended synthetic value');
+          const alreadyExisted = existing.has(name);
           writes.push(name); existing.add(name);
-          return route.fulfill({ status: 204, headers: cors, body: '' });
+          // GitHub's creation response is 201 with no JSON body; update is 204.
+          if (alreadyExisted) empty204Updates++;
+          else empty201Creates++;
+          return route.fulfill({ status: alreadyExisted ? 204 : 201, headers: cors, body: '' });
         }
         if (suffix.endsWith('/dispatches')) {
           dispatches++; remoteRun = true;
@@ -126,6 +131,10 @@ try {
         }
         if (suffix === '/actions/runs/123456789') return json(run);
         if (suffix.startsWith('/contents/')) {
+          if (!failed && mode === 'proof-network') {
+            failed = true;
+            return route.abort('failed');
+          }
           const proof = { schema: 'WORLD_ENGINE_MOBILE_DROPBOX_PROOF_V1', runId: 123456789, attempt: 1,
             status: 'PASS', reasonCode: 'MOBILE_DROPBOX_CPU_RECOVERY_VERIFIED', sourceImage: image,
             offlineTokenRefreshVerified: true, metadataReadVerified: true, externalStorageRecoveryVerified: true,
@@ -200,6 +209,7 @@ try {
     check(dispatches === 1, 'one workflow dispatch across retries');
     check(writes.length === 3 && writes.includes(names.appKey) && writes.includes(names.refresh)
       && writes.some(name => name.startsWith('WORLD_ENGINE_STUDIO_DROPBOX_BINDING_')), 'only connection identity and grant saved');
+    check(empty201Creates === 3 && empty204Updates === 0, 'first-time Secret creation accepts documented 201 empty bodies');
     check(!writes.includes(names.key) && !writes.includes(names.appSecret), 'existing encryption key and App Secret preserved');
     check(secretBodies.every(body => ![pat, replacementPat, access, refresh].some(value => body.includes(value))), 'no plaintext credential in GitHub Secret request body');
     check(authValues.every(value => value === 'Bearer ' + pat || value === 'Bearer ' + replacementPat), 'only expected synthetic authorization headers');
@@ -214,6 +224,7 @@ try {
     check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'mobile result has no horizontal overflow');
     result.cases.push({ case: mode, status: 'PASS', oauthTokenExchanges: tokenExchanges,
       secretWrites: writes.length, proofDispatches: dispatches, runsMetadataReads: runsGets,
+      empty201Creates, empty204Updates,
       existingKeyPreserved: true, existingAppSecretPreserved: true, gpuExecuted: false });
     await context.close();
   }

@@ -75,7 +75,7 @@
     let configuring = false;
     let verificationDispatchState = "not_attempted";
 
-    async function request(url, init, expected, code, limit) {
+    async function request(url, init, expected, code, limit, optionalCreatedBody = false) {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), TIMEOUT);
       try {
@@ -87,6 +87,7 @@
         if (response.status === 204) return { status: 204, data: null };
         const headerLength = response.headers && response.headers.get("content-length");
         if (headerLength && (!/^\d+$/.test(headerLength) || Number(headerLength) > limit)) fail(code + "_RESPONSE_TOO_LARGE");
+        if (!response.body && optionalCreatedBody && response.status === 201) return { status: 201, data: null };
         if (!response.body || typeof response.body.getReader !== "function") fail(code + "_RESPONSE_INVALID");
         const reader = response.body.getReader();
         const chunks = [];
@@ -98,6 +99,9 @@
           if (length > limit) { await reader.cancel(); fail(code + "_RESPONSE_TOO_LARGE"); }
           chunks.push(part.value);
         }
+        // Secret creation acknowledges success with 201; no returned object is
+        // required. Optional data remains bounded; configure still verifies metadata.
+        if (optionalCreatedBody && response.status === 201) return { status: 201, data: null };
         const buffer = new Uint8Array(length);
         let offset = 0;
         for (const part of chunks) { buffer.set(part, offset); offset += part.byteLength; }
@@ -122,9 +126,18 @@
     async function github(pat, suffix, method = "GET", body, expected = [200]) {
       const headers = githubHeaders(pat);
       if (body !== undefined) headers["Content-Type"] = "application/json";
-      return request(GITHUB + "/repos/" + REPOSITORY + suffix, {
-        method, headers, ...(body === undefined ? {} : { body: JSON.stringify(body) })
-      }, expected, "GITHUB", 262144);
+      try {
+        return await request(GITHUB + "/repos/" + REPOSITORY + suffix, {
+          method, headers, ...(body === undefined ? {} : { body: JSON.stringify(body) })
+        }, expected, "GITHUB", 262144, method === "PUT" && /^\/actions\/secrets\/[A-Z0-9_]+$/.test(suffix));
+      } catch (error) {
+        // Fixed stage labels only; never attach a URL, header, body, or token.
+        error.stage = suffix.endsWith('/dispatches') ? 'WORKFLOW_START'
+          : suffix.includes('/runs') ? 'WORKFLOW_STATUS'
+          : suffix.endsWith('/public-key') ? 'PUBLIC_KEY_READ'
+          : method === 'PUT' ? 'SECRET_WRITE' : 'SECRET_METADATA_READ';
+        throw error;
+      }
     }
     async function begin(appKey) {
       validateAppKey(appKey);
